@@ -1,3 +1,17 @@
 data/
 *.sif
 *.out
+
+# secrets
+.env
+
+# training artifacts
+checkpoints/
+model.pt
+
+# local docker testing
+local_data/
+local_output/
+
+# exported docker images
+*.tar
