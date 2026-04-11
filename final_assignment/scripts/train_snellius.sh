@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=cityscapes_dlvp_r50
+#SBATCH --job-name=cityscapes_dlvp_r50_metrics
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
@@ -26,4 +26,4 @@ set -a
 source .env
 set +a
 
-python train.py --config configs/peak_deeplabv3plus_r50.yaml
+python train.py --config configs/peak_deeplabv3plus_r50_metrics.yaml

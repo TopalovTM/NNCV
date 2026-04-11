@@ -1,0 +1,27 @@
+experiment_name: peak-deeplabv3plus-r50-metrics
+
+data:
+  root_dir: ../data/cityscapes
+  num_classes: 19
+  image_size: [512, 1024]
+  num_workers: 8
+
+model:
+  name: deeplabv3plus
+  encoder_name: resnet50
+  encoder_weights: imagenet
+  in_channels: 3
+  classes: 19
+
+train:
+  seed: 42
+  batch_size: 4
+  epochs: 50
+  lr: 0.0001
+  weight_decay: 0.0001
+  amp: true
+
+logging:
+  use_wandb: true
+  project: 5lsm0-cityscapes-segmentation
+  log_images: true

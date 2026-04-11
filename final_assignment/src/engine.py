@@ -5,6 +5,7 @@ from torchvision.utils import make_grid
 import wandb
 
 from src.data import convert_to_train_id, convert_train_id_to_color
+from src.metrics import mean_dice, mean_iou
 
 
 def train_one_epoch(
@@ -60,9 +61,13 @@ def validate(
     use_amp: bool,
     use_wandb: bool,
     log_images: bool,
-) -> float:
+    num_classes: int,
+) -> dict[str, float]:
     model.eval()
+
     losses = []
+    dice_scores = []
+    iou_scores = []
 
     for step, (images, labels) in enumerate(loader):
         labels = convert_to_train_id(labels)
@@ -74,6 +79,8 @@ def validate(
             loss = criterion(outputs, labels)
 
         losses.append(loss.item())
+        dice_scores.append(mean_dice(outputs, labels, num_classes=num_classes))
+        iou_scores.append(mean_iou(outputs, labels, num_classes=num_classes))
 
         if step == 0 and use_wandb and log_images:
             predictions = outputs.softmax(1).argmax(1).unsqueeze(1)
@@ -93,9 +100,20 @@ def validate(
                 }
             )
 
-    avg_loss = sum(losses) / len(losses)
+    metrics = {
+        "val_loss": sum(losses) / len(losses),
+        "val_dice": sum(dice_scores) / len(dice_scores),
+        "val_miou": sum(iou_scores) / len(iou_scores),
+    }
 
     if use_wandb:
-        wandb.log({"val/loss": avg_loss, "val/epoch": epoch})
+        wandb.log(
+            {
+                "val/loss": metrics["val_loss"],
+                "val/dice": metrics["val_dice"],
+                "val/miou": metrics["val_miou"],
+                "val/epoch": epoch,
+            }
+        )
 
-    return avg_loss
+    return metrics

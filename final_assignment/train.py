@@ -14,7 +14,6 @@ Feel free to customize the script as needed for your use case.
 """
 from __future__ import annotations
 
-import os
 import random
 from argparse import ArgumentParser
 from pathlib import Path
@@ -69,6 +68,8 @@ def main():
         )
 
     image_size = tuple(cfg["data"]["image_size"])
+    num_classes = int(cfg["data"]["num_classes"])
+
     train_loader, valid_loader = build_dataloaders(
         data_dir=cfg["data"]["root_dir"],
         image_size=image_size,
@@ -92,7 +93,10 @@ def main():
     scaler = torch.cuda.amp.GradScaler(enabled=use_amp)
 
     best_valid_loss = float("inf")
-    best_model_path = output_dir / "best_model.pt"
+    best_valid_dice = float("-inf")
+
+    best_loss_model_path = output_dir / "best_model_loss.pt"
+    best_dice_model_path = output_dir / "best_model_dice.pt"
     last_model_path = output_dir / "last_model.pt"
 
     for epoch in range(1, cfg["train"]["epochs"] + 1):
@@ -108,7 +112,7 @@ def main():
             use_wandb=use_wandb,
         )
 
-        valid_loss = validate(
+        val_metrics = validate(
             model=model,
             loader=valid_loader,
             criterion=criterion,
@@ -117,11 +121,20 @@ def main():
             use_amp=use_amp,
             use_wandb=use_wandb,
             log_images=bool(cfg["logging"]["log_images"]),
+            num_classes=num_classes,
         )
+
+        val_loss = val_metrics["val_loss"]
+        val_dice = val_metrics["val_dice"]
+        val_miou = val_metrics["val_miou"]
 
         print(
             f"Epoch {epoch:03d}/{cfg['train']['epochs']:03d} | "
-            f"train_loss={train_loss:.4f} | val_loss={valid_loss:.4f}"
+            f"train_loss={train_loss:.4f} | "
+            f"val_loss={val_loss:.4f} | "
+            f"val_dice={val_dice:.4f} | "
+            f"val_miou={val_miou:.4f}",
+            flush=True,
         )
 
         if use_wandb:
@@ -129,20 +142,27 @@ def main():
                 {
                     "epoch": epoch,
                     "train/loss_epoch": train_loss,
-                    "val/loss_epoch": valid_loss,
+                    "val/loss_epoch": val_loss,
+                    "val/dice_epoch": val_dice,
+                    "val/miou_epoch": val_miou,
                 }
             )
 
         torch.save(model.state_dict(), last_model_path)
 
-        if valid_loss < best_valid_loss:
-            best_valid_loss = valid_loss
-            torch.save(model.state_dict(), best_model_path)
+        if val_loss < best_valid_loss:
+            best_valid_loss = val_loss
+            torch.save(model.state_dict(), best_loss_model_path)
+
+        if val_dice > best_valid_dice:
+            best_valid_dice = val_dice
+            torch.save(model.state_dict(), best_dice_model_path)
 
     if use_wandb:
         wandb.finish()
 
-    print(f"Training complete. Best model saved to {best_model_path}")
+    print(f"Training complete. Best loss model: {best_loss_model_path}")
+    print(f"Training complete. Best dice model: {best_dice_model_path}")
 
 
 if __name__ == "__main__":
