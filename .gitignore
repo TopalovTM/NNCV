@@ -138,6 +138,12 @@ ENV/
 env.bak/
 venv.bak/
 
+# Assignment artifacts
+Final assignment/data/
+Final assignment/checkpoints/
+Final assignment/*.out
+Final assignment/*.sif
+
 # Spyder project settings
 .spyderproject
 .spyproject
