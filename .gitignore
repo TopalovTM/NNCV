@@ -128,7 +128,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-Final assignment/.env
+final_assignment/.env
 **/.env
 .env
 .venv
@@ -139,10 +139,10 @@ env.bak/
 venv.bak/
 
 # Assignment artifacts
-Final assignment/data/
-Final assignment/checkpoints/
-Final assignment/*.out
-Final assignment/*.sif
+final_assignment/data/
+final_assignment/checkpoints/
+final_assignment/*.out
+final_assignment/*.sif
 
 # Spyder project settings
 .spyderproject
@@ -180,3 +180,7 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Local testing
+local_data
+local_output
