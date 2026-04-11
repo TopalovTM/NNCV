@@ -143,6 +143,11 @@ final_assignment/data/
 final_assignment/checkpoints/
 final_assignment/*.out
 final_assignment/*.sif
+final_assignment/logs/
+
+logs
+data
+*.sif
 
 # Spyder project settings
 .spyderproject
