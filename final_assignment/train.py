@@ -27,6 +27,7 @@ from src.config import load_config
 from src.data import build_dataloaders
 from src.engine import train_one_epoch, validate
 from src.models.deeplabv3plus import Model
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 
 def parse_args():
@@ -84,12 +85,24 @@ def main():
         classes=cfg["model"]["classes"],
     ).to(device)
 
-    criterion = nn.CrossEntropyLoss(ignore_index=255)
+    criterion = nn.CrossEntropyLoss(
+        ignore_index=255,
+        label_smoothing=cfg["train"].get("label_smoothing", 0.0),
+    )
+
     optimizer = AdamW(
         model.parameters(),
         lr=cfg["train"]["lr"],
         weight_decay=cfg["train"]["weight_decay"],
     )
+
+    scheduler = ReduceLROnPlateau(
+        optimizer,
+        mode="max",
+        factor=cfg["train"].get("lr_scheduler_factor", 0.5),
+        patience=cfg["train"].get("lr_scheduler_patience", 3),
+    )
+
     scaler = torch.cuda.amp.GradScaler(enabled=use_amp)
 
     best_valid_loss = float("inf")
@@ -98,6 +111,10 @@ def main():
     best_loss_model_path = output_dir / "best_model_loss.pt"
     best_dice_model_path = output_dir / "best_model_dice.pt"
     last_model_path = output_dir / "last_model.pt"
+
+    # Early stopping
+    early_stopping_patience = cfg["train"].get("early_stopping_patience", 6)
+    epochs_without_improvement = 0
 
     for epoch in range(1, cfg["train"]["epochs"] + 1):
         train_loss = train_one_epoch(
@@ -128,6 +145,9 @@ def main():
         val_dice = val_metrics["val_dice"]
         val_miou = val_metrics["val_miou"]
 
+        # Add scheduler step
+        scheduler.step(val_dice)
+
         print(
             f"Epoch {epoch:03d}/{cfg['train']['epochs']:03d} | "
             f"train_loss={train_loss:.4f} | "
@@ -145,6 +165,7 @@ def main():
                     "val/loss_epoch": val_loss,
                     "val/dice_epoch": val_dice,
                     "val/miou_epoch": val_miou,
+                    "train/lr_epoch": optimizer.param_groups[0]["lr"],
                 }
             )
 
@@ -157,6 +178,26 @@ def main():
         if val_dice > best_valid_dice:
             best_valid_dice = val_dice
             torch.save(model.state_dict(), best_dice_model_path)
+            epochs_without_improvement = 0
+        else:
+            epochs_without_improvement += 1
+
+        # Check for early stopping
+        current_lr = optimizer.param_groups[0]["lr"]
+
+        print(
+            f"Current LR: {current_lr:.6f} | "
+            f"Epochs without improvement: {epochs_without_improvement}",
+            flush=True,
+        )
+
+        if epochs_without_improvement >= early_stopping_patience:
+            print(
+                f"Early stopping triggered after {epoch} epochs. "
+                f"Best val_dice: {best_valid_dice:.4f}",
+                flush=True,
+            )
+            break
 
     if use_wandb:
         wandb.finish()
