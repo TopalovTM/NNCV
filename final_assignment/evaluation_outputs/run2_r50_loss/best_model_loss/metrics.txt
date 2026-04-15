@@ -1,0 +1,3 @@
+val_loss: 0.182608
+val_dice: 0.668699
+val_miou: 0.582983
