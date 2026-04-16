@@ -1,12 +1,3 @@
-"""
-This script provides and example implementation of a prediction pipeline 
-for a PyTorch U-Net model. It loads a pre-trained model, processes input 
-images, and saves the predicted segmentation masks. 
-
-You can use this file for submissions to the Challenge server. Customize 
-the `preprocess` and `postprocess` functions to fit your model's input 
-and output requirements.
-"""
 from __future__ import annotations
 
 from pathlib import Path
@@ -25,10 +16,6 @@ from torchvision.transforms.v2 import (
 
 from src.models.deeplabv3plus import Model
 
-# Fixed paths inside participant container
-# Do NOT chnage the paths, these are fixed locations where the server will 
-# provide input data and expect output data.
-# Only for local testing, you can change these paths to point to your local data and output folders.
 IMAGE_DIR = "/data"
 OUTPUT_DIR = "/output"
 MODEL_PATH = "/app/model.pt"
@@ -36,9 +23,6 @@ IMAGE_SIZE = (512, 1024)
 
 
 def preprocess(img: Image.Image) -> torch.Tensor:
-    # Implement your preprocessing steps here
-    # For example, resizing, normalization, etc.
-    # Return a tensor suitable for model input
     transform = Compose(
         [
             ToImage(),
@@ -55,9 +39,6 @@ def preprocess(img: Image.Image) -> torch.Tensor:
 
 
 def postprocess(pred: torch.Tensor, original_shape: tuple[int, int]) -> np.ndarray:
-    # Implement your postprocessing steps here
-    # For example, resizing back to original shape, converting to color mask, etc.
-    # Return a numpy array suitable for saving as an image
     pred_max = pred.argmax(dim=1, keepdim=True)
     pred_resized = Resize(
         size=original_shape,
@@ -77,10 +58,10 @@ def main() -> None:
         classes=19,
     )
     state_dict = torch.load(MODEL_PATH, map_location=device, weights_only=True)
-    model.load_state_dict(state_dict, strict=True) # Ensure the state dict matches the model architecture
+    model.load_state_dict(state_dict, strict=True)
     model.eval().to(device)
 
-    image_files = list(Path(IMAGE_DIR).glob("*.png")) # DO NOT CHANGE, IMAGES WILL BE PROVIDED IN THIS FORMAT
+    image_files = list(Path(IMAGE_DIR).glob("*.png"))
     print(f"Found {len(image_files)} images to process.")
 
     with torch.no_grad():

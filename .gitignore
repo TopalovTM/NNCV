@@ -192,3 +192,6 @@ local_output
 
 # MAC
 .DS_Store
+
+# Tar files
+*.tar.gz

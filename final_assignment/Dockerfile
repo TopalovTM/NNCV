@@ -10,21 +10,23 @@ RUN apt-get update && apt-get install -y \
     python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
-
-# create virtual environment
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
+RUN pip install --no-cache-dir --upgrade pip
 
-# install dependencies (add any additional dependencies your project requires)
 RUN pip install --no-cache-dir \
     torch torchvision --index-url https://download.pytorch.org/whl/cu126
+
 RUN pip install --no-cache-dir \
-    pillow
+    pillow \
+    numpy \
+    segmentation-models-pytorch
 
 WORKDIR /app
+
 COPY predict.py /app/predict.py
-COPY model.py /app/model.py
+COPY src /app/src
 COPY model.pt /app/model.pt
 
 ENTRYPOINT ["python", "/app/predict.py"]
