@@ -1,0 +1,3 @@
+checkpoint: checkpoints/peak-deeplabv3plus-r101-tuned/best_model_dice.pt
+mean_dice: 0.680105
+mean_miou: 0.609791
