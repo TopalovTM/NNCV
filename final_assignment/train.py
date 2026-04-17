@@ -190,15 +190,13 @@ def main():
         current_lr = optimizer.param_groups[0]["lr"]
 
         print(
-            f"Current LR: {current_lr:.6f} | "
-            f"Epochs without improvement: {epochs_without_improvement}",
+            f"Current LR: {current_lr:.6f} | Epochs without improvement: {epochs_without_improvement}",
             flush=True,
         )
 
         if epochs_without_improvement >= early_stopping_patience:
             print(
-                f"Early stopping triggered after {epoch} epochs. "
-                f"Best val_dice: {best_valid_dice:.4f}",
+                f"Early stopping triggered after {epoch} epochs. Best val_dice: {best_valid_dice:.4f}",
                 flush=True,
             )
             break

@@ -22,10 +22,7 @@ def main():
             thr = df[col].quantile(q)
             rejected = (df[col] > thr).mean()
             kept_mean_dice = df.loc[df[col] <= thr, "dice"].mean()
-            print(
-                f"  q={q:.2f}  threshold={thr:.6f}  "
-                f"rejected={rejected:.3%}  kept_mean_dice={kept_mean_dice:.6f}"
-            )
+            print(f"  q={q:.2f}  threshold={thr:.6f}  rejected={rejected:.3%}  kept_mean_dice={kept_mean_dice:.6f}")
 
     print("\n=== Low-is-bad scores (reject if score < threshold) ===")
     for col in low_bad:
@@ -34,10 +31,7 @@ def main():
             thr = df[col].quantile(q)
             rejected = (df[col] < thr).mean()
             kept_mean_dice = df.loc[df[col] >= thr, "dice"].mean()
-            print(
-                f"  q={q:.2f}  threshold={thr:.6f}  "
-                f"rejected={rejected:.3%}  kept_mean_dice={kept_mean_dice:.6f}"
-            )
+            print(f"  q={q:.2f}  threshold={thr:.6f}  rejected={rejected:.3%}  kept_mean_dice={kept_mean_dice:.6f}")
 
     print("\n=== Correlation with Dice ===")
     cols = ["mean_msp", "mean_entropy", "mean_energy", "p95_entropy", "p05_msp", "dice"]

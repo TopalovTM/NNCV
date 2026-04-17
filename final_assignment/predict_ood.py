@@ -126,10 +126,7 @@ def main() -> None:
             include = should_include(score)
 
             if idx < 20:
-                print(
-                    f"SCORE {img_path} | "
-                    f"{OOD_SCORE_NAME}={score:.6f} | include={include}"
-                )
+                print(f"SCORE {img_path} | {OOD_SCORE_NAME}={score:.6f} | include={include}")
 
             seg_pred = postprocess(logits, original_shape)
 

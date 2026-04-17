@@ -100,9 +100,7 @@ def main():
 
             mean_msp = float(image_mean_msp(logits)[0].item())
             mean_entropy = float(image_mean_entropy(logits)[0].item())
-            mean_energy = float(
-                image_mean_energy(logits, temperature=args.energy_temperature)[0].item()
-            )
+            mean_energy = float(image_mean_energy(logits, temperature=args.energy_temperature)[0].item())
             p95_entropy = float(image_percentile_entropy(logits, 95.0)[0].item())
             p05_msp = float(image_percentile_low_msp(logits, 5.0)[0].item())
 

@@ -14,15 +14,9 @@ def load_image(path: str) -> np.ndarray:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--gt", type=str, required=True, help="Path to ground-truth visualization"
-    )
-    parser.add_argument(
-        "--r101l", type=str, required=True, help="Path to R101 label visualization"
-    )
-    parser.add_argument(
-        "--r101p", type=str, required=True, help="Path to R101 prediction visualization"
-    )
+    parser.add_argument("--gt", type=str, required=True, help="Path to ground-truth visualization")
+    parser.add_argument("--r101l", type=str, required=True, help="Path to R101 label visualization")
+    parser.add_argument("--r101p", type=str, required=True, help="Path to R101 prediction visualization")
     parser.add_argument("--output", type=str, required=True, help="Output figure path")
     parser.add_argument("--title", type=str, default="", help="Optional figure title")
     args = parser.parse_args()

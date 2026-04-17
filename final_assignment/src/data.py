@@ -13,9 +13,7 @@ from torchvision.transforms.v2 import (
 )
 
 ID_TO_TRAIN_ID = {cls.id: cls.train_id for cls in Cityscapes.classes}
-TRAIN_ID_TO_COLOR = {
-    cls.train_id: cls.color for cls in Cityscapes.classes if cls.train_id != 255
-}
+TRAIN_ID_TO_COLOR = {cls.train_id: cls.color for cls in Cityscapes.classes if cls.train_id != 255}
 TRAIN_ID_TO_COLOR[255] = (0, 0, 0)
 
 
