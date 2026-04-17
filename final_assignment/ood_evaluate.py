@@ -5,9 +5,6 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 import torch
-from PIL import Image
-from torchvision.utils import save_image
-
 from src.config import load_config
 from src.data import (
     build_dataloaders,
@@ -23,6 +20,7 @@ from src.ood.scores import (
     image_percentile_entropy,
     image_percentile_low_msp,
 )
+from torchvision.utils import save_image
 
 
 def parse_args():
@@ -153,8 +151,8 @@ def main():
     summary_path = save_dir / "summary.txt"
     with summary_path.open("w", encoding="utf-8") as f:
         f.write(f"checkpoint: {checkpoint_path}\n")
-        f.write(f"mean_dice: {sum(total_dice)/len(total_dice):.6f}\n")
-        f.write(f"mean_miou: {sum(total_miou)/len(total_miou):.6f}\n")
+        f.write(f"mean_dice: {sum(total_dice) / len(total_dice):.6f}\n")
+        f.write(f"mean_miou: {sum(total_miou) / len(total_miou):.6f}\n")
 
     print(f"Saved OOD scores to: {csv_path}")
     print(f"Saved summary to: {summary_path}")

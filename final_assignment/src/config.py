@@ -1,6 +1,9 @@
 from __future__ import annotations
+
 from pathlib import Path
+
 import yaml
+
 
 def load_config(config_path: str | Path) -> dict:
     config_path = Path(config_path)

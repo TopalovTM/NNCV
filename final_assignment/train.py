@@ -1,17 +1,22 @@
 """
-This script implements a training loop for the model. It is designed to be flexible, 
+This script implements a training loop for the model. It is designed to be flexible,
 allowing you to easily modify hyperparameters using a command-line argument parser.
 
 ### Key Features:
-1. **Hyperparameter Tuning:** Adjust hyperparameters by parsing arguments from the `main.sh` script or directly 
+1. **Hyperparameter Tuning:** Adjust hyperparameters by parsing arguments from the
+ `main.sh` script or directly
    via the command line.
-2. **Remote Execution Support:** Since this script runs on a server, training progress is not visible on the console. 
-   To address this, we use the `wandb` library for logging and tracking progress and results.
-3. **Encapsulation:** The training loop is encapsulated in a function, enabling it to be called from the main block. 
+2. **Remote Execution Support:** Since this script runs on a server, training progress
+ is not visible on the console.
+   To address this, we use the `wandb` library for logging and tracking progress and
+     results.
+3. **Encapsulation:** The training loop is encapsulated in a function, enabling it to be
+ called from the main block.
    This ensures proper execution when the script is run directly.
 
 Feel free to customize the script as needed for your use case.
 """
+
 from __future__ import annotations
 
 import random
@@ -21,12 +26,11 @@ from pathlib import Path
 import torch
 import torch.nn as nn
 import wandb
-from torch.optim import AdamW
-
 from src.config import load_config
 from src.data import build_dataloaders
 from src.engine import train_one_epoch, validate
 from src.models.deeplabv3plus import Model
+from torch.optim import AdamW
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 

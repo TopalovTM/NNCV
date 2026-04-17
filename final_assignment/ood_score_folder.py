@@ -6,15 +6,6 @@ from pathlib import Path
 
 import torch
 from PIL import Image
-from torchvision.transforms.v2 import (
-    Compose,
-    InterpolationMode,
-    Normalize,
-    Resize,
-    ToDtype,
-    ToImage,
-)
-
 from src.models.deeplabv3plus import Model
 from src.ood.scores import (
     image_mean_energy,
@@ -22,6 +13,14 @@ from src.ood.scores import (
     image_mean_msp,
     image_percentile_entropy,
     image_percentile_low_msp,
+)
+from torchvision.transforms.v2 import (
+    Compose,
+    InterpolationMode,
+    Normalize,
+    Resize,
+    ToDtype,
+    ToImage,
 )
 
 IMAGE_SIZE = (512, 1024)
@@ -102,9 +101,7 @@ def main():
             mean_msp = float(image_mean_msp(logits)[0].item())
             mean_entropy = float(image_mean_entropy(logits)[0].item())
             mean_energy = float(
-                image_mean_energy(
-                    logits, temperature=args.energy_temperature
-                )[0].item()
+                image_mean_energy(logits, temperature=args.energy_temperature)[0].item()
             )
             p95_entropy = float(image_percentile_entropy(logits, 95.0)[0].item())
             p05_msp = float(image_percentile_low_msp(logits, 5.0)[0].item())

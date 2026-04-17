@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import torch
-from torchvision.utils import make_grid
 import wandb
-
 from src.data import convert_to_train_id, convert_train_id_to_color
 from src.metrics import mean_dice, mean_iou
+from torchvision.utils import make_grid
 
 
 def train_one_epoch(

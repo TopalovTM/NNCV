@@ -14,10 +14,18 @@ def load_image(path: str) -> np.ndarray:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--id-image", type=str, required=True, help="Path to ID example image")
-    parser.add_argument("--ood-image", type=str, required=True, help="Path to OOD example image")
-    parser.add_argument("--id-score", type=float, required=True, help="Score for ID image")
-    parser.add_argument("--ood-score", type=float, required=True, help="Score for OOD image")
+    parser.add_argument(
+        "--id-image", type=str, required=True, help="Path to ID example image"
+    )
+    parser.add_argument(
+        "--ood-image", type=str, required=True, help="Path to OOD example image"
+    )
+    parser.add_argument(
+        "--id-score", type=float, required=True, help="Score for ID image"
+    )
+    parser.add_argument(
+        "--ood-score", type=float, required=True, help="Score for OOD image"
+    )
     parser.add_argument("--score-name", type=str, default="mean_msp", help="Score name")
     parser.add_argument("--output", type=str, required=True, help="Output figure path")
     parser.add_argument("--title", type=str, default="", help="Optional figure title")

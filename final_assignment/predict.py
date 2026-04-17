@@ -5,6 +5,7 @@ from pathlib import Path
 import numpy as np
 import torch
 from PIL import Image
+from src.models.deeplabv3plus import Model
 from torchvision.transforms.v2 import (
     Compose,
     InterpolationMode,
@@ -13,8 +14,6 @@ from torchvision.transforms.v2 import (
     ToDtype,
     ToImage,
 )
-
-from src.models.deeplabv3plus import Model
 
 IMAGE_DIR = "/data"
 OUTPUT_DIR = "/output"

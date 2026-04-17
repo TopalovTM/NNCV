@@ -10,9 +10,13 @@ import pandas as pd
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--id-csv", type=str, required=True, help="CSV with ID scores")
-    parser.add_argument("--ood-csv", type=str, required=True, help="CSV with OOD scores")
+    parser.add_argument(
+        "--ood-csv", type=str, required=True, help="CSV with OOD scores"
+    )
     parser.add_argument("--score", type=str, required=True, help="Column name to plot")
-    parser.add_argument("--threshold", type=float, required=True, help="Threshold to draw")
+    parser.add_argument(
+        "--threshold", type=float, required=True, help="Threshold to draw"
+    )
     parser.add_argument("--output", type=str, required=True, help="Output figure path")
     parser.add_argument("--bins", type=int, default=40, help="Number of bins")
     parser.add_argument("--id-label", type=str, default="Cityscapes (ID)")

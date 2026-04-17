@@ -1,14 +1,10 @@
 from __future__ import annotations
 
-import random
 from argparse import ArgumentParser
 from pathlib import Path
 
 import torch
 import torch.nn as nn
-from PIL import Image
-from torchvision.utils import save_image
-
 from src.config import load_config
 from src.data import (
     build_dataloaders,
@@ -17,6 +13,7 @@ from src.data import (
 )
 from src.metrics import mean_dice, mean_iou
 from src.models.deeplabv3plus import Model
+from torchvision.utils import save_image
 
 
 def parse_args():
