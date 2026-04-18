@@ -6,12 +6,8 @@ data/
 .env
 
 # training artifacts
+checkpoints/
 model.pt
-
-checkpoints/*
-!checkpoints/peak-deeplabv3plus-r101-tuned/
-checkpoints/peak-deeplabv3plus-r101-tuned/*
-!checkpoints/peak-deeplabv3plus-r101-tuned/best_model_dice.pt
 
 # local docker testing
 local_data/
