@@ -140,10 +140,14 @@ venv.bak/
 
 # Assignment artifacts
 final_assignment/data/
-final_assignment/checkpoints/
 final_assignment/*.out
 final_assignment/*.sif
 final_assignment/logs/
+
+final_assignment/checkpoints/*
+!final_assignment/checkpoints/peak-deeplabv3plus-r101-tuned/
+final_assignment/checkpoints/peak-deeplabv3plus-r101-tuned/*
+!final_assignment/checkpoints/peak-deeplabv3plus-r101-tuned/best_model_dice.pt
 
 logs
 data
