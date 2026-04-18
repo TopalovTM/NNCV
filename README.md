@@ -221,6 +221,8 @@ OOD submission utilizes similar approach but uses `predict_ood.py` instead of `p
   - plotting
   - Docker-based submission tests
 
+Note: final training checkpoints are not stored directly in this forked repository due to storage and Git LFS limitations on public forks. The repository contains the code, configuration files, evaluation scripts, and submission pipeline used to reproduce the reported results.
+
 ## Acknowledgment
 
 This work was carried out as part of the NNCV final assignment. The author would like to thank the course team for providing the challenge framework, baseline code, and evaluation infrastructure. The author is also grateful for access to the Snellius high-performance computing resources used for model training and evaluation.
